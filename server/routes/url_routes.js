@@ -1,5 +1,5 @@
 const express = require("express");
-const {handleShortUrl, redirectOriginalURL} = require("../controllers/url_controller")
+const {handleShortUrl, redirectOriginalURL, analyticClicks} = require("../controllers/url_controller");
 
 const route = express.Router();
 
@@ -13,5 +13,8 @@ route.post("/originalUrl", handleShortUrl);
 
 // Redirect to original url
 route.get("/:shortUrl", redirectOriginalURL);
+
+// Analytics for number of times each url clicked
+route.get("/analytics/:shortUrl", analyticClicks);
 
 module.exports = route;

@@ -34,5 +34,16 @@ exports.redirectOriginalURL = async (req, res) => {
             },
         }
     );
+
     res.redirect(findShortUrl.originalURL);
+}
+
+// Get short id and redirect to original url
+exports.analyticClicks = async (req, res) => {
+    const shortUrl = req.params.shortUrl;
+    const findShortUrl = await ShortURL.findOne({shortUrl});
+    res.status(200).json(
+        {totalClicks: findShortUrl.clickRecords.length}
+    );
+    console.log("TotalClicks===> ",findShortUrl.clickRecords.length);
 }
