@@ -51,6 +51,11 @@ exports.analyticClicks = async (req, res) => {
     console.log("TotalClicks===> ",findShortUrl.clickRecords.length);
 }
 
+// User dashboard access control
+exports.userActionController = (req, res) => {
+    return res.status(200).json({ email: req.email, name: req.name, });
+}
+
 // User Register
 exports.userRegister = (req, res) => {
     const {name, email, password } = req.body;
@@ -89,7 +94,12 @@ exports.userLogin = (req, res) => {
                     if (response) {
                         const token = jwt.sign({ email: user.email, name: user.name },
                         process.env.JWT_SECRET, { expiresIn: "1d" })
-                        res.cookie("token", token, );
+                        res.cookie("token", token, {
+                            httpOnly: true,
+                            sameSite: process.env.CORS_SAME_SITE,
+                            secure: true,
+                            path: '/'
+                        });
                         res.status(200).json({ msg: "Success", user: user })
 
                     } else {
@@ -101,3 +111,16 @@ exports.userLogin = (req, res) => {
             }
         })
 }
+
+// User Logout
+exports.UserLogout = (req, res) => {
+
+    res.cookie("token", "", {
+        expires: new Date(0),
+        httpOnly: true,
+        sameSite: process.env.CORS_SAME_SITE,
+        secure: true,
+        path: '/'
+    });
+    return res.status(200).json({ msg: "Success" });
+};
