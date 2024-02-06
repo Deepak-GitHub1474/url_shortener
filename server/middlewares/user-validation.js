@@ -28,7 +28,7 @@ exports.verifyUser = (req, res, next) => {
     if (!token) {
         return res.json("The token is missing")
     } else {
-        jwt.verify(token, "jwt-secret-key", (err, decoded) => {
+        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
             if (err) {
                 return res.json("The token is wrong")
             } else {
