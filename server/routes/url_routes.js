@@ -7,7 +7,8 @@ const {
         userLogin, 
         userActionController, 
         UserLogout,
-        getAllShortUrl
+        getAllShortUrl,
+        deleteShortUrl
     } = require("../controllers/url_controller");
 
 const { registerValidation, loginValidation, verifyUser } = require("../middlewares/user-validation");
@@ -21,7 +22,7 @@ route.get("/test", (req, res) => {
 // Home
 route.get("/", verifyUser, userActionController);
 
-// Get all shortUrl
+// Get all short url
 route.get("/shorturls", getAllShortUrl);
 
 // User Register
@@ -33,7 +34,7 @@ route.post("/login", loginValidation, userLogin);
 // User Logout
 route.get("/logout", UserLogout);
 
-// Create short id
+// Create short url
 route.post("/originalUrl", handleShortUrl);
 
 // Redirect to original url
@@ -41,5 +42,8 @@ route.get("/:shortUrl", redirectOriginalURL);
 
 // Analytics for number of times each url clicked
 route.get("/analytics/:shortUrl", analyticClicks);
+
+// Delete short url
+route.delete('/url/:id', verifyUser, deleteShortUrl);
 
 module.exports = route;

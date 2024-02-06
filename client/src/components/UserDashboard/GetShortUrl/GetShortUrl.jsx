@@ -27,6 +27,16 @@ const GetShortUrl = () => {
     window.open(`${BASE_URL}/${shortUrl}`, "_blank");
   };
 
+   // Delete url
+   function handleDelete(id) {
+    axios
+      .delete(`${BASE_URL}/url/${id}`)
+      .then((res) => {
+        alert(res.data.msg)
+      })
+      .catch((err) => console.log(err));
+  }
+
 
   return (
     <>
@@ -35,12 +45,18 @@ const GetShortUrl = () => {
         <h1 className="font-bold text-3xl text-blue-500">All Short Url</h1>
         <p className=" font-light text-sm">Click below button to redirect on original url</p>
         {url.map((url) => (
-          <div key={url._id} className="">
+          <div key={url._id} className=" flex gap-2">
             <button 
               onClick={() => redirectToOriginalUrl(url.shortUrl)} 
               className="bg-blue-600 text-white rounded-md p-2 hover:bg-blue-500 cursor-pointer w-48"
             >
               {url.shortUrl}
+            </button>
+            <button 
+              className="bg-red-600 text-white rounded-md p-2 hover:bg-red-500 cursor-pointer w-fit"
+              onClick={() => handleDelete(url._id)}
+            >
+              delete
             </button>
           </div>
         ))}
