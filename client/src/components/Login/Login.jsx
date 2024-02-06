@@ -29,7 +29,7 @@ const Login = () => {
     }
                         
     return (
-        <div className="min-h-[90vh] flex items-center justify-center py-4 px-2">
+        <div className="flex items-center justify-center py-8 px-2">
             {!user.email ? 
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:w-[500px] w-[95vw] pb-4 pt-4 px-2 rounded-lg shadow-[0_0_1px_gray] relative overflow-hidden">
                 <h1 className="text-center font-bold text-3xl text-blue-500 mb-2">Login Form</h1>

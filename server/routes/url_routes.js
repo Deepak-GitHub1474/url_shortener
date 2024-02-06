@@ -6,7 +6,8 @@ const {
         userRegister, 
         userLogin, 
         userActionController, 
-        UserLogout
+        UserLogout,
+        getAllShortUrl
     } = require("../controllers/url_controller");
 
 const { registerValidation, loginValidation, verifyUser } = require("../middlewares/user-validation");
@@ -19,6 +20,9 @@ route.get("/test", (req, res) => {
 
 // Home
 route.get("/", verifyUser, userActionController);
+
+// Get all shortUrl
+route.get("/shorturls", getAllShortUrl);
 
 // User Register
 route.post("/register", registerValidation, userRegister);

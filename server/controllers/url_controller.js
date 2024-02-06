@@ -10,7 +10,7 @@ exports.handleShortUrl = async (req, res) => {
     console.log("userlLongUrl===>", userlLongUrl);
 
     if (!userlLongUrl.url) {
-        return res.status(400).json({ message: "url is required!" });
+        return res.status(400).json({ msg: "url is required!" });
     }
 
     const shortUrl = shortid();
@@ -22,7 +22,8 @@ exports.handleShortUrl = async (req, res) => {
         clickRecords: [],
     });
 
-    return res.status(200).json({ shortUrl: `ShortUrl created ${shortUrl}` });
+    return res.status(200).json({ msg: `ShortUrl created`, shortUrl: shortUrl });
+
 };
 
 // Get short id and redirect to original url
@@ -41,7 +42,7 @@ exports.redirectOriginalURL = async (req, res) => {
     res.redirect(findShortUrl.originalURL);
 }
 
-// Get short id and redirect to original url
+// Get short id to analytics
 exports.analyticClicks = async (req, res) => {
     const shortUrl = req.params.shortUrl;
     const findShortUrl = await ShortURL.findOne({shortUrl});
@@ -50,6 +51,13 @@ exports.analyticClicks = async (req, res) => {
     );
     console.log("TotalClicks===> ",findShortUrl.clickRecords.length);
 }
+
+// Get all shorturls
+exports.getAllShortUrl = async (req, res) => {
+    ShortURL.find()
+        .then(shorturl => res.json(shorturl))
+        .catch(err => res.json(err))
+};
 
 // User dashboard access control
 exports.userActionController = (req, res) => {
