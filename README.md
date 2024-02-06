@@ -6,9 +6,13 @@
 - `npm i express mongoose nodemon shortid dotenv cors bcrypt cookie-parser jsonwebtoken`
 
 #### Routes
+- GET ["/test"] : Only for testing purpose.
 - POST ["/originalUrl"] : Create shortener url.
 - GET ["/:shortUrl"] : Find shortener url and redirect.
 - GET ["/analytics/:shortUrl"] : Analytics of number of times click each url.
+- POST ["/register"] : New User register.
+- POST ["/login"] : User login.
+
 
 ### Client
 
