@@ -17,6 +17,10 @@ const urlSchema = new mongoose.Schema({
         timestamp: { type: Number } 
     }],
 
+    userEmail: {
+        type: String,
+    }
+
 }, { timestamps: true });
 
 const ShortURL = mongoose.model('shorturls', urlSchema);

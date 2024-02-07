@@ -6,20 +6,21 @@ const jwt = require("jsonwebtoken");
 
 // Create short id
 exports.handleShortUrl = async (req, res) => {
-    const userlLongUrl = req.body;
-    console.log("userlLongUrl===>", userlLongUrl);
+    const {url, email} = req.body;
+    // console.log("userlLongUrl===>", url);
 
-    if (!userlLongUrl.url) {
+    if (!url) {
         return res.status(400).json({ msg: "url is required!" });
     }
 
     const shortUrl = shortid();
-    console.log("shortUrl====>", shortUrl);
+    // console.log("shortUrl====>", shortUrl);
 
     await ShortURL.create({
         shortUrl: shortUrl,
-        originalURL: userlLongUrl.url,
+        originalURL: url,
         clickRecords: [],
+        userEmail: email
     });
 
     return res.status(200).json({ msg: `ShortUrl created`, shortUrl: shortUrl });
@@ -29,7 +30,7 @@ exports.handleShortUrl = async (req, res) => {
 // Get short id and redirect to original url
 exports.redirectOriginalURL = async (req, res) => {
     const shortUrl = req.params.shortUrl;
-    console.log("ShortUrl===>", shortUrl);
+    // console.log("ShortUrl===>", shortUrl);
     const findShortUrl = await ShortURL.findOneAndUpdate({ shortUrl },
         {
             $push: {

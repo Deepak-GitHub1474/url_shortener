@@ -10,10 +10,9 @@ const GetShortUrl = () => {
   const [url, setUrl] = useState([]);
   const [updatedShortUrl, setUpdatedShortUrl] = useState("");
   const [isUpdating, setIsUpdating] = useState(null);
+  const [isAnalyticsOpen, setIsAnalyticsOpen] = useState(false);
 
-  const { user, refresh } = useUrl();
-
-  axios.defaults.withCredentials = true;
+  const { user, refresh, updateDashBoard } = useUrl();
 
   // Function to fetch updated data
   const fetchShortUrls = () => {
@@ -30,34 +29,26 @@ const GetShortUrl = () => {
     fetchShortUrls();
   }, [refresh]);
 
-  // Redirect on original url
-  const redirectToOriginalUrl = (shortUrl, originalURL) => {
-      try {
-        if (originalURL.startsWith("http://") || originalURL.startsWith("https://")) {
-          window.open(originalURL, "_blank");
-        } else {
-          window.open(`https://${originalURL}`, "_blank");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-  };
+  // Filter User Url to control crud operation securely
+  const filterUserUrls = url.filter(url => url.userEmail === user.email);
 
   // Redirect on original url
-  // const redirectToOriginalUrl = (shortUrl, originalURL) => {
-  //   axios
-  //     .get(`${BASE_URL}/${shortUrl}`, { withCredentials: true })
-  //     .then((res) => {
-  //       // console.log(res);
-  //       let originalURL = res.data.originalURL;
-  //       if (originalURL.startsWith("http://") || originalURL.startsWith("https://")) {
-  //         window.open(originalURL, "_blank");
-  //       } else {
-  //         window.open(`https://${originalURL}`, "_blank");
-  //       }
-  //     })
-  //     .catch((err) => console.log(err));
-  // };
+  const redirectToOriginalUrl = (shortUrl, originalURL) => {
+    axios
+      .get(`${BASE_URL}/${shortUrl}`, { withCredentials: true })
+      .then((res) => {
+        // console.log(res);
+        let originalURL = res.data.originalURL;
+        if (originalURL.startsWith("http://") || originalURL.startsWith("https://")) {
+          window.open(originalURL, "_blank");
+          updateDashBoard();
+        } else {
+          window.open(`https://${originalURL}`, "_blank");
+          updateDashBoard();
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   // Delete url
   const handleDelete = (id) => {
@@ -97,42 +88,68 @@ const GetShortUrl = () => {
   return (
     <>
       {user.email ? (
-        <div className="flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] py-4 px-2 rounded-lg shadow-[0_0_1px_gray] overflow-hidden">
-          <h1 className="font-bold text-3xl text-blue-500">All Short Url</h1>
-          <p className=" font-light text-sm">
-            Click below button to redirect on original url
+        <div className="flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] py-4 px-2 rounded-lg shadow-[0_0_1px_gray] overflow-hidden relative">
+          <h1 
+            className={`font-bold sm:text-3xl text-xl ${isAnalyticsOpen ? "text-pink-600": "text-blue-500"}`}>
+              {!isAnalyticsOpen ? "All Short URL" : "Number of times each URL clicked"}
+          </h1>
+          <button 
+            onClick={() => setIsAnalyticsOpen(!isAnalyticsOpen)} 
+            className="bg-pink-600 text-white rounded-md py-2 px-4 hover:bg-pink-500 cursor-pointer w-fit">
+            {isAnalyticsOpen ? "Close Analytics" : "Open Analytics"}
+          </button>
+          <p className=" text-sm">
+            Click first button to redirect on original URL
           </p>
-          {url.map((url) => (
-            <div key={url._id} className=" flex gap-2">
-              {isUpdating === url._id ? (
-                <textarea
-                  name="shortUrl"
-                  value={updatedShortUrl}
-                  onChange={handleTextareaChange}
-                  className="p-3 rounded-md border-none outline-none shadow-[0_0_1px_gray] w-48 overflow-y-auto max-h-10 min-h-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
-                />
-              ) : (
-                <button
-                  onClick={() => redirectToOriginalUrl(url.shortUrl, url.originalURL)}
-                  className="bg-blue-600 text-white rounded-md p-2 hover:bg-blue-500 cursor-pointer w-48"
-                >
-                  {url.shortUrl}
-                </button>
-              )}
-              <button
-                className="bg-red-600 text-white rounded-md p-2 hover:bg-red-500 cursor-pointer w-20"
-                onClick={() => handleDelete(url._id)}
-              >
-                delete
-              </button>
-              <button
-                className="bg-green-600 text-white rounded-md p-2 hover:bg-green-500 cursor-pointer w-20"
-                onClick={() => handleEdit(url._id, url.shortUrl)}
-              >
-                {isUpdating === url._id ? "save" : "edit"}
-              </button>
+          {filterUserUrls.map((url) => (
+            <div key={url._id} className=" flex gap-4">
+                <>
+                  {isUpdating === url._id ? (
+                    <textarea
+                      name="shortUrl"
+                      value={updatedShortUrl}
+                      onChange={handleTextareaChange}
+                      className="p-3 rounded-md border-none outline-none shadow-[0_0_1px_gray] w-36 overflow-y-auto max-h-10 min-h-10 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]"
+                    />
+                  ) : (
+                    <button
+                      onClick={() =>
+                        redirectToOriginalUrl(url.shortUrl, url.originalURL)
+                      }
+                      className="bg-blue-600 text-white rounded-md p-2 hover:bg-blue-500 cursor-pointer w-36"
+                    >
+                      {url.shortUrl}
+                    </button>
+                  )}
+
+                  <button
+                    className="bg-red-600 text-white rounded-md p-2 hover:bg-red-500 cursor-pointer w-20"
+                    onClick={() => handleDelete(url._id)}
+                  >
+                    delete
+                  </button>
+                  <button
+                    className="bg-green-600 text-white rounded-md p-2 hover:bg-green-500 cursor-pointer w-20"
+                    onClick={() => handleEdit(url._id, url.shortUrl)}
+                  >
+                    {isUpdating === url._id ? "save" : "edit"}
+                  </button> 
+                </>
             </div>
           ))}
+          {isAnalyticsOpen && 
+          <div className="absolute bottom-0 bg-white flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] max-h-80 min-h-80 py-4 px-2 rounded-lg overflow-y-auto ">
+              <div className="flex mb-8">
+                <p className=" absolute left-14 font-semibold bg-sky-100 p-2 rounded-lg">Short URL</p>
+                <p className=" absolute right-14 font-semibold bg-sky-100 p-2 rounded-lg">Total Click</p>
+              </div>
+              {filterUserUrls.map(url => (
+                <div key={url._id} className="flex items-center">
+                  <p className="w-[18rem] bg-pink-50 p-2 text-gray-600">{url.shortUrl}</p>
+                  <p className="max-w-20 min-w-20 bg-pink-50 p-2 text-gray-600 text-center overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">{url.clickRecords.length}</p>
+                </div>
+              ))}
+          </div>}
         </div>
       ) : (
         <Navigate to="/login" />
