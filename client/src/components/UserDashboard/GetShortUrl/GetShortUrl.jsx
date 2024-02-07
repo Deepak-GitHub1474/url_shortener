@@ -89,18 +89,25 @@ const GetShortUrl = () => {
     <>
       {user.email ? (
         <div className="flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] py-4 px-2 rounded-lg shadow-[0_0_1px_gray] overflow-hidden relative">
-          <h1 
-            className={`font-bold sm:text-3xl text-xl ${isAnalyticsOpen ? "text-pink-600": "text-blue-500"}`}>
-              {!isAnalyticsOpen ? "All Short URL" : "Number of times each URL clicked"}
-          </h1>
-          <button 
-            onClick={() => setIsAnalyticsOpen(!isAnalyticsOpen)} 
-            className="bg-pink-600 text-white rounded-md py-2 px-4 hover:bg-pink-500 cursor-pointer w-fit">
-            {isAnalyticsOpen ? "Close Analytics" : "Open Analytics"}
-          </button>
-          <p className=" text-sm">
-            Click first button to redirect on original URL
-          </p>
+          {filterUserUrls.length > 0 &&
+          <div className="flex flex-col items-center gap-4">
+            <h1 
+              className={`font-bold sm:text-3xl text-xl ${isAnalyticsOpen ? "text-pink-600": "text-blue-500"}`}>
+                {!isAnalyticsOpen ? "All Short URL" : "Number of times each URL clicked"}
+            </h1>
+            <button 
+              onClick={() => setIsAnalyticsOpen(!isAnalyticsOpen)} 
+              className="bg-pink-600 text-white rounded-md py-2 px-4 hover:bg-pink-500 cursor-pointer w-fit">
+              {isAnalyticsOpen ? "Close Analytics" : "Open Analytics"}
+            </button>
+          </div>}
+          <div className="text-sm">
+            {filterUserUrls.length > 0 ?
+            <span>Click first button to redirect on original URL</span>
+            :
+            <span>No URL found, create your short URL</span>
+            }
+          </div>
           {filterUserUrls.map((url) => (
             <div key={url._id} className=" flex gap-4">
                 <>
@@ -137,8 +144,15 @@ const GetShortUrl = () => {
                 </>
             </div>
           ))}
-          {isAnalyticsOpen && 
-          <div className="absolute bottom-0 bg-white flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] max-h-80 min-h-80 py-4 px-2 rounded-lg overflow-y-auto ">
+          {isAnalyticsOpen &&
+          <div className="relative bottom-0 z-50 bg-white flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] max-h-80 min-h-80 py-4 px-2 rounded-lg overflow-y-auto ">
+              
+              <button 
+                onClick={() => setIsAnalyticsOpen(!isAnalyticsOpen)} 
+                className="bg-pink-600 text-white rounded-full p-2 hover:bg-pink-500 cursor-pointer w-10 h-10 text-center font-bold absolute left-1 top-1 z-50">
+                X
+              </button>
+              
               <div className="flex mb-8">
                 <p className=" absolute left-14 font-semibold bg-sky-100 p-2 rounded-lg">Short URL</p>
                 <p className=" absolute right-14 font-semibold bg-sky-100 p-2 rounded-lg">Total Click</p>

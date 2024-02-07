@@ -33,7 +33,7 @@ const CreateShortUrl = () => {
     <>
       {user.email ? (
           <form onSubmit={handleSubmit} className="flex flex-col gap-4 sm:w-[500px] w-[95vw] max-h-60 py-4 px-2 rounded-lg shadow-[0_0_1px_gray] relative overflow-hidden">
-                <h1 className="text-center font-bold sm:text-3xl text-xl text-blue-500 mb-2">Genrate Short URL</h1>
+                <h1 className="text-center font-bold sm:text-3xl text-xl text-blue-500 mb-2">Create Short URL</h1>
                 <input 
                     required
                     type="text" 
