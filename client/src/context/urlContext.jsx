@@ -17,6 +17,8 @@ export const UrlProvider= ({children}) => {
         email: null
     })
 
+    const [refresh, setRefresh] = useState(false);
+
     axios.defaults.withCredentials = true; // Global Credential
 
     useEffect(() => {
@@ -31,9 +33,14 @@ export const UrlProvider= ({children}) => {
       
         fetchUser();
       }, []);
+    
+    // Updating dashboard
+    const updateDashBoard = () => {
+      setRefresh(!refresh);
+    };
 
     return (
-        <UrlContext.Provider value={{ user }} >
+        <UrlContext.Provider value={{ user, refresh, updateDashBoard }} >
           {children}
         </UrlContext.Provider>
       );

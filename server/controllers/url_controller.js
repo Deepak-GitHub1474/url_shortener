@@ -29,6 +29,7 @@ exports.handleShortUrl = async (req, res) => {
 // Get short id and redirect to original url
 exports.redirectOriginalURL = async (req, res) => {
     const shortUrl = req.params.shortUrl;
+    console.log("ShortUrl===>", shortUrl);
     const findShortUrl = await ShortURL.findOneAndUpdate({ shortUrl },
         {
             $push: {
@@ -39,7 +40,8 @@ exports.redirectOriginalURL = async (req, res) => {
         }
     );
 
-    res.redirect(findShortUrl.originalURL);
+    // res.redirect(findShortUrl.originalURL); // API Testing
+    res.status(200).json({originalURL: findShortUrl.originalURL});
 }
 
 // Get short id to analytics
@@ -138,4 +140,15 @@ exports.deleteShortUrl = (req, res) => {
     ShortURL.findByIdAndDelete({ _id: req.params.id })
         .then(result => res.status(200).json({msg: "URL deleted!"}))
         .catch(err => res.status(500).json(err))
+}
+
+// Update Short Url
+exports.updateShortUrl = (req, res) => {
+    ShortURL.findByIdAndUpdate(
+        { _id: req.params.id },
+        {
+            shortUrl: req.body.shortUrl,
+        }
+    ).then(result => res.status(200).json({msg: "URL updated!"}))
+     .catch(err => res.status(500).json(err))
 }

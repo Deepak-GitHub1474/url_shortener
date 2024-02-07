@@ -8,8 +8,8 @@ import axios from "axios";
 
 const CreateShortUrl = () => {
 
-  const [url, setUrl] = useState();
-  const { user } = useUrl();
+  const [url, setUrl] = useState("");
+  const { user, updateDashBoard } = useUrl();
 
   axios.defaults.withCredentials = true;
 
@@ -20,6 +20,8 @@ const CreateShortUrl = () => {
       .post(`${BASE_URL}/originalUrl`, { url })
       .then((res) => {
         alert(`${res.data.msg}: ${res.data.shortUrl}`);
+        updateDashBoard();
+        setUrl("");
       })
       .catch((err) => {
         alert(err.response.data.msg);
@@ -39,6 +41,7 @@ const CreateShortUrl = () => {
                     placeholder="url" 
                     className="p-3 rounded-md border-none outline-none shadow-[0_0_1px_gray]" 
                     onChange={e => setUrl(e.target.value)}
+                    value={url}
                 />
                 <button className="bg-blue-600 text-white font-bold rounded-md p-[0.7rem] hover:bg-blue-500 cursor-pointer flex items-center justify-center">
                     Send
