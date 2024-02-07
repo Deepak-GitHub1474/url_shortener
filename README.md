@@ -7,11 +7,16 @@
 
 #### Routes
 - GET ["/test"] : Only for testing purpose.
+- GET ["/"] : Landing page[Home page].
 - POST ["/originalUrl"] : Create shortener url.
 - GET ["/:shortUrl"] : Find shortener url and redirect.
+- GET ["/shorturls"] : Get all short url.
 - GET ["/analytics/:shortUrl"] : Analytics of number of times click each url.
 - POST ["/register"] : New User register.
 - POST ["/login"] : User login.
+- GET ["/login"] : User Logout.
+- DELETE ["/deleteUrl/:id"] : Delete short url.
+- PATCH ["/updateUrl/:id"] : Update short url.
 
 
 ### Client
