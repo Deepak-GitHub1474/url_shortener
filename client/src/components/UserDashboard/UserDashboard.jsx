@@ -1,20 +1,15 @@
 import { useEffect, useState } from "react";
 import CreateShortUrl from "./CreateShortUrl/CreateShortUrl";
 import GetShortUrl from "./GetShortUrl/GetShortUrl";
+import { useUrl } from "../../context/urlContext";
 
 const UserDashboard = () => {
 
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    setTimeout(() => {
-      setLoading(!loading);
-    }, 1000);
-  }, []);
+  const {isLogged} = useUrl();
 
   return (
     <>
-      {loading ?
+      {isLogged ?
       <div className="min-h-[90vh] flex items-center justify-center p-2">
           <div className="flex flex-col gap-6 items-center bg-slate-200 rounded-lg border-[1px] border-gray-300 p-2 w-60">
             <div className="font-semibold">

@@ -18,6 +18,7 @@ export const UrlProvider= ({children}) => {
     })
 
     const [refresh, setRefresh] = useState(false);
+    const [isLogged, setIsLogged] = useState(true);
 
     axios.defaults.withCredentials = true; // Global Credential
 
@@ -26,6 +27,7 @@ export const UrlProvider= ({children}) => {
           try {
             const response = await axios.get(`${BASE_URL}/`);
             setUser(response.data);
+            setIsLogged(false);
           } catch (err) {
             console.log(err);
           }
@@ -40,7 +42,7 @@ export const UrlProvider= ({children}) => {
     };
 
     return (
-        <UrlContext.Provider value={{ user, refresh, updateDashBoard }} >
+        <UrlContext.Provider value={{ user, refresh, isLogged, updateDashBoard }} >
           {children}
         </UrlContext.Provider>
       );
