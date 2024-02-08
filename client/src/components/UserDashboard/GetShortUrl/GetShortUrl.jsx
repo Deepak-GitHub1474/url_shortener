@@ -33,7 +33,7 @@ const GetShortUrl = () => {
   const filterUserUrls = url.filter(url => url.userEmail === user.email);
 
   // Redirect on original url
-  const redirectToOriginalUrl = (shortUrl, originalURL) => {
+  const redirectToOriginalUrl = (shortUrl) => {
     axios
       .get(`${BASE_URL}/${shortUrl}`, { withCredentials: true })
       .then((res) => {
@@ -87,9 +87,9 @@ const GetShortUrl = () => {
 
   return (
     <>
-      {user.email ? (
+      {user?.email ? (
         <div className="flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] py-4 px-2 rounded-lg shadow-[0_0_1px_gray] overflow-hidden relative">
-          {filterUserUrls.length > 0 &&
+          {filterUserUrls.length > 0 && 
           <div className="flex flex-col items-center gap-4">
             <h1 
               className={`font-bold sm:text-3xl text-xl ${isAnalyticsOpen ? "text-pink-600": "text-blue-500"}`}>
@@ -121,7 +121,7 @@ const GetShortUrl = () => {
                   ) : (
                     <button
                       onClick={() =>
-                        redirectToOriginalUrl(url.shortUrl, url.originalURL)
+                        redirectToOriginalUrl(url.shortUrl)
                       }
                       className="bg-blue-600 text-white rounded-md p-2 hover:bg-blue-500 cursor-pointer w-36"
                     >
@@ -145,7 +145,7 @@ const GetShortUrl = () => {
             </div>
           ))}
           {isAnalyticsOpen &&
-          <div className="relative bottom-0 z-50 bg-white flex flex-col items-center gap-4 sm:w-[500px] w-[95vw] max-h-80 min-h-80 py-4 px-2 rounded-lg overflow-y-auto ">
+          <div className="relative bottom-0 z-50 bg-white flex flex-col items-center gap-4 sm:w-[450px] w-[95vw] max-h-80 min-h-80 py-4 px-2 rounded-lg overflow-y-auto ">
               
               <button 
                 onClick={() => setIsAnalyticsOpen(!isAnalyticsOpen)} 
@@ -153,13 +153,13 @@ const GetShortUrl = () => {
                 X
               </button>
               
-              <div className="flex mb-8">
-                <p className=" absolute left-14 font-semibold bg-sky-100 p-2 rounded-lg">Short URL</p>
-                <p className=" absolute right-14 font-semibold bg-sky-100 p-2 rounded-lg">Total Click</p>
+              <div className="flex items-center mt-10">
+                <p className="w-[14.5rem] font-semibold bg-sky-100 p-2">Short URL</p>
+                <p className="font-semibold bg-sky-100 p-2">Total Click</p>
               </div>
               {filterUserUrls.map(url => (
                 <div key={url._id} className="flex items-center">
-                  <p className="w-[18rem] bg-pink-50 p-2 text-gray-600">{url.shortUrl}</p>
+                  <p className="w-[15rem] bg-pink-50 p-2 text-gray-600">{url.shortUrl}</p>
                   <p className="max-w-20 min-w-20 bg-pink-50 p-2 text-gray-600 text-center overflow-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">{url.clickRecords.length}</p>
                 </div>
               ))}

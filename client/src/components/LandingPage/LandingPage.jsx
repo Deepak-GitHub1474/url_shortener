@@ -8,7 +8,7 @@ import axios from "axios";
 const LandingPage = () => {
 
   const [url, setUrl] = useState([]);
-  const { refresh, updateDashBoard } = useUrl();
+  const {user, refresh, updateDashBoard } = useUrl();
 
   // Get all shortUrl
   useEffect(() => {
@@ -39,6 +39,7 @@ const LandingPage = () => {
 
   return (
     <main className=" min-h-[90vh] flex flex-col items-center justify-center gap-10 sm:px-24 px-2 py-8">
+      {user?.email ?
       <div className="flex items-center justify-center flex-wrap gap-10 p-2">
         {url.map((url) => (
           <div key={url._id} 
@@ -56,7 +57,7 @@ const LandingPage = () => {
               </button>
             </div>
             <div className="flex flex-col items-center gap-2">
-              <h1 className="font-semibold">Number of click</h1>
+              <h1 className="font-semibold">Total Click</h1>
               <p className="max-w-32 min-w-20 bg-slate-100 p-2 text-center overflow-auto font-semibold border border-transparent
             border-gray-300 rounded-md">
                 {url.clickRecords.length}
@@ -64,7 +65,16 @@ const LandingPage = () => {
             </div>
           </div>
         ))}
-      </div>
+      </div> : 
+        <div className="flex flex-col gap-6 items-center bg-slate-200 rounded-lg border-[1px]
+        border-gray-300 p-2 w-60">
+            <div className="font-semibold">
+              <span className="text-xl">Please Wait</span>
+              <span className="inline-block animate-bounce ml-1 text-2xl">...</span>
+            </div>
+            <span className="inline-block w-16 h-16 border-4 border-white border-b-pink-600 rounded-full animate-spin"></span>
+        </div>
+      }
     </main>
   );
 };
