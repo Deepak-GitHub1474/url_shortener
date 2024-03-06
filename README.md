@@ -1,6 +1,40 @@
 ## URL Shortener Application
 
-### Server
+### Application Overview
+This is a full stack project. This application allows users to input a long URL 
+and receive a shortened version of it. When users visit the shortened URL, 
+they will be redirected to the original long URL. User registration and login to use
+this application. User dashboard where they can view their list of shortened URLs 
+and manage them (edit, delete, view analytics). To perform CRUD operation users will be
+authenticated so that they can perform CRUD opertaion only on their or URLs.
+This application also have track and display basic analytics such as the number of 
+times each shortened URL has been clicked and the timestamps to keep track of times too.
+
+### Features:
+- User registration with unique credential only[Here unique credential is email].
+- User login
+- JWT token based authentication
+- Creating short URL of provided long form URL.
+- Edit the short url.
+- Delete the short url.
+- Redirecting to original url on click over short url.
+- Analytics of number of times each url clicked or number of people visited on perticular url.
+- Timestamps of visiting times
+- Responsive and attractive UI.
+- Loader to engage the user while fetching the data from database.
+
+### Frameworks/Library/Tools/Host 
+- React.jS
+- Tailwind CSS
+- Node.Js
+- Express.Js
+- Mongoose
+- MongoDB
+- JSON Web Token
+- Cloudinary
+- Render
+
+### Server setup
 
 #### Install below package/module/library.
 - `npm i express mongoose nodemon shortid dotenv cors bcrypt cookie-parser jsonwebtoken`
@@ -19,7 +53,7 @@
 - PATCH ["/updateUrl/:id"] : Update short url.
 
 
-### Client
+### Client setup
 
 ### Configure tailwind CSS in VIte-React
 
